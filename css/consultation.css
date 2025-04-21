@@ -1,0 +1,187 @@
+/* Consultation Page Styles */
+.consultation-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.patient-info-panel,
+.consultation-actions-panel {
+  background-color: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  overflow: hidden;
+}
+
+/* Patient Header */
+.patient-header {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  background-color: var(--tertiary-color);
+}
+
+.patient-avatar {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid white;
+  margin-right: 15px;
+}
+
+.patient-details h2 {
+  color: var(--primary-color);
+  margin-bottom: 5px;
+}
+
+.patient-details p {
+  color: var(--secondary-color);
+  font-size: 0.9rem;
+}
+
+/* Consultation Tabs */
+.consultation-tabs,
+.action-tabs {
+  display: flex;
+  background-color: var(--background-color);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.consultation-tabs .tab-btn,
+.action-tabs .tab-btn {
+  flex: 1;
+  text-align: center;
+  padding: 15px;
+}
+
+/* Symptom Detail */
+.symptom-detail {
+  padding: 20px;
+}
+
+.symptom-detail h3 {
+  color: var(--primary-color);
+  margin-bottom: 15px;
+}
+
+.symptom-detail p {
+  margin-bottom: 10px;
+}
+
+/* Medical History */
+.medical-history-list {
+  padding: 20px;
+}
+
+.history-item {
+  margin-bottom: 20px;
+}
+
+.history-item h4 {
+  color: var(--primary-color);
+  margin-bottom: 10px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid var(--tertiary-color);
+}
+
+.history-item ul {
+  padding-left: 20px;
+  list-style-type: disc;
+}
+
+.history-item ul li {
+  margin-bottom: 5px;
+}
+
+.past-symptom {
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px dashed var(--border-color);
+}
+
+.past-symptom:last-child {
+  border-bottom: none;
+}
+
+/* Prescription List */
+.prescription-list {
+  padding: 20px;
+}
+
+.prescription-item {
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.prescription-item:last-child {
+  border-bottom: none;
+}
+
+/* Consultation Actions */
+.consultation-actions-panel form {
+  padding: 20px;
+}
+
+.duration-input {
+  display: flex;
+  gap: 10px;
+}
+
+.duration-input input {
+  width: 70px;
+}
+
+.duration-input select {
+  flex: 1;
+}
+
+.add-medication {
+  margin-top: 10px;
+}
+
+.radio-group {
+  display: flex;
+  gap: 20px;
+}
+
+.radio-group label {
+  display: flex;
+  align-items: center;
+  font-weight: normal;
+}
+
+.radio-group input[type="radio"] {
+  width: auto;
+  margin-right: 5px;
+}
+
+/* Responsive Styles */
+@media (max-width: 992px) {
+  .consultation-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 576px) {
+  .consultation-tabs,
+  .action-tabs {
+    flex-direction: column;
+  }
+
+  .patient-header {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .patient-avatar {
+    margin-right: 0;
+    margin-bottom: 15px;
+  }
+
+  .radio-group {
+    flex-direction: column;
+    gap: 10px;
+  }
+}

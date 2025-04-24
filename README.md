@@ -22,7 +22,7 @@ A web-based telehealth platform built with PHP, MySQL and vanilla JavaScript. He
 
 - **Backend**: PHP 7+, MySQL  
 - **Frontend**: HTML5, CSS3, vanilla JavaScript (tabs, filtering, dynamic UI)  
-- **Server**: Apache (XAMPP, MAMP, LAMP)  
+- **Server**: Apache (XAMPP)  
 - **Session & Auth**: PHP sessions, role-based access (patient vs doctor)  
 
 ## ⚙️ Installation

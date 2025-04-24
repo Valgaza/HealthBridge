@@ -22,7 +22,6 @@ if (isset($_SESSION['user_type'])) {
   <div class="login-container">
     <div class="login-form-container">
       <div class="login-header">
-        <img src="images/logo.png" alt="HealthBridge Logo" class="logo">
         <h1>HealthBridge</h1>
         <p>Your bridge to better health</p>
       </div>

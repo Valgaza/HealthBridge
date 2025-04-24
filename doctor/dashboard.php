@@ -42,9 +42,9 @@ $sql = "
          c.consultation_type, s.symptom_name, s.symptom_severity
   FROM consultations c
   JOIN users u       ON u.id = c.user_id
-  JOIN symptoms s    ON s.id = c.symptom_id
+  LEFT JOIN symptoms s    ON s.id = c.symptom_id
   WHERE c.doctor_id = $doctor_id
-    AND c.consultation_status IN('pending','accepted')
+    AND c.consultation_status IN('accepted')
     AND c.consultation_date >= CURDATE()
   ORDER BY c.consultation_date, c.consultation_time
   LIMIT 5
@@ -55,8 +55,8 @@ $res_upcoming = mysqli_query($conn, $sql);
 $sql = "
   SELECT c.id, u.full_name, s.symptom_name, s.symptom_severity, c.created_at
   FROM consultations c
-  JOIN users u    ON u.id = c.user_id
-  JOIN symptoms s ON s.id = c.symptom_id
+  JOIN users u        ON u.id = c.user_id
+  LEFT JOIN symptoms s ON s.id = c.symptom_id
   WHERE c.doctor_id = $doctor_id
     AND c.consultation_status = 'pending'
   ORDER BY c.created_at DESC
@@ -174,7 +174,12 @@ while ($row = mysqli_fetch_assoc($res_schedule)) {
                     <p>Date: <span><?= $row['consultation_date'] ?></span></p>
                     <p>Time: <span><?= $row['consultation_time'] ?></span></p>
                     <p>Type: <span><?= ucfirst($row['consultation_type']) ?></span></p>
-                    <p>Reason: <span><?= htmlspecialchars($row['symptom_name']) ?>, <?= ucfirst($row['symptom_severity']) ?></span></p>
+                    <p>Reason: 
+                      <span>
+                        <?= htmlspecialchars($row['symptom_name'] ?? '—') ?>,
+                        <?= ucfirst(htmlspecialchars($row['symptom_severity'] ?? '—')) ?>
+                      </span>
+                    </p>
                   </div>
                   <div class="consultation-actions">
                     <a href="consultation.php?id=<?= $row['id'] ?>" class="btn btn-primary">Start Consultation</a>
@@ -198,8 +203,12 @@ while ($row = mysqli_fetch_assoc($res_schedule)) {
                 <div class="request-item">
                   <div class="request-info">
                     <h4><?= htmlspecialchars($row['full_name']) ?></h4>
-                    <p>Symptom: <span><?= htmlspecialchars($row['symptom_name']) ?></span></p>
-                    <p>Severity: <span class="severity <?= $row['symptom_severity'] ?>"><?= ucfirst($row['symptom_severity']) ?></span></p>
+                    <p>Symptom: <span><?= htmlspecialchars($row['symptom_name'] ?? '—') ?></span></p>
+                    <p>Severity: 
+                      <span class="severity <?= $row['symptom_severity'] ?? '' ?>">
+                        <?= ucfirst(htmlspecialchars($row['symptom_severity'] ?? '—')) ?>
+                      </span>
+                    </p>
                     <p>Requested: <span><?= date('M d, Y', strtotime($row['created_at'])) ?></span></p>
                   </div>
                   <div class="request-actions">

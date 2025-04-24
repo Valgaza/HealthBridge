@@ -1,31 +1,52 @@
 <?php
 require_once __DIR__ . '/../php/config.php';
 require_doctor();
+
 $doctor_id = $_SESSION['user_id'];
 
 // Fetch all pending consultation requests for this doctor
 $sql = "
-  SELECT
-    c.id,
-    u.full_name      AS patient_name,
-    s.symptom_name,
-    s.symptom_severity,
-    c.consultation_date,
-    c.consultation_time,
-    c.consultation_type
-  FROM consultations c
-  JOIN users u   ON u.id        = c.user_id
-  LEFT JOIN symptoms s ON s.id  = c.symptom_id
-  WHERE c.doctor_id        = ?
+    SELECT c.id, u.full_name AS patient_name, s.symptom_name, s.symptom_severity, c.consultation_date, c.consultation_time, c.consultation_type
+    FROM consultations c
+    JOIN users u ON u.id = c.user_id
+    LEFT JOIN symptoms s ON s.id = c.symptom_id
+    WHERE c.doctor_id = ?
     AND c.consultation_status = 'pending'
-  ORDER BY c.consultation_date DESC, c.consultation_time DESC
+    ORDER BY c.consultation_date DESC, c.consultation_time DESC
 ";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param('i', $doctor_id);
 $stmt->execute();
 $requests = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 $stmt->close();
+
+// Function to handle accepting or declining a consultation request
+if (isset($_GET['action']) && isset($_GET['consultation_id'])) {
+    $action = $_GET['action']; // 'accept' or 'decline'
+    $consultation_id = $_GET['consultation_id'];
+
+    if ($action == 'accept') {
+        $status = 'accepted';
+    } elseif ($action == 'decline') {
+        $status = 'declined';
+    } else {
+        $status = 'pending';
+    }
+
+    // Update the consultation status in the database
+    $update_sql = "UPDATE consultations SET consultation_status = ? WHERE id = ?";
+    $update_stmt = $conn->prepare($update_sql);
+    $update_stmt->bind_param('si', $status, $consultation_id);
+    $update_stmt->execute();
+    $update_stmt->close();
+
+    // Redirect back to the requests page
+    header("Location: requests.php");
+    exit();
+}
+
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -87,8 +108,8 @@ $stmt->close();
                 </p>
               </div>
               <div class="request-actions">
-                <button class="btn btn-primary">Accept</button>
-                <button class="btn btn-outline">Decline</button>
+                <a href="requests.php?action=accept&consultation_id=<?= $r['id'] ?>" class="btn btn-primary">Accept</a>
+                <a href="requests.php?action=decline&consultation_id=<?= $r['id'] ?>" class="btn btn-outline">Decline</a>
               </div>
             </div>
           <?php endforeach; ?>
